@@ -12,7 +12,7 @@
 
 ⸻
 
-📌 Overview
+📌 OVERVIEW
 
 Health Scheme Connect is a full-stack healthcare platform that helps citizens discover government health schemes, compare hospitals, estimate treatment costs, monitor bed availability, and access healthcare information through a single, user-friendly interface.
 
