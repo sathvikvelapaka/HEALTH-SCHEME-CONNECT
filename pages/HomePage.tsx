@@ -109,10 +109,10 @@ const HomePage: React.FC<HomePageProps> = ({ onSearch, onNavigate }) => {
             </p>
 
             {/* Live Stats Indicators inside Hero */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <div className="bg-white/10 backdrop-blur-md px-4.5 py-2.5 rounded-2xl border border-white/15 shadow-sm text-xs font-bold text-white flex items-center gap-2">
-                <span className="text-teal-400 text-lg">✔</span>
-                <span>{slides[activeSlide].stats}</span>
+            <div className="flex flex-wrap items-center gap-10 pt-10">
+              <div className="bg-white/5 backdrop-blur-md px-4.5 py-7 rounded-2xl border border-white/15 shadow-sm text-xs font-bold text-white flex items-center gap-4">
+                
+                <span className='pb-3'>{slides[activeSlide].stats}</span>
               </div>
               <div className="bg-white/10 backdrop-blur-md px-4.5 py-2.5 rounded-2xl border border-white/15 shadow-sm text-xs font-bold text-white flex items-center gap-2">
                 <span className="text-emerald-400">●</span>
@@ -142,9 +142,9 @@ const HomePage: React.FC<HomePageProps> = ({ onSearch, onNavigate }) => {
       </section>
 
       {/* 2. Overlapping Multi-dropdown Real Hospital Search Widget */}
-      <section className="relative z-30 -mt-10 sm:-mt-14 px-6">
+      <section className="relative z-30 mt-8  px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-6 sm:p-8 shadow-[0_30px_70px_rgba(15,23,42,0.18)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.6)] border border-gray-100 dark:border-gray-800">
+          <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] pt-200 sm:p-8 shadow-[0_30px_70px_rgba(15,23,42,0.18)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.6)] border border-gray-100 dark:border-gray-800">
             
             <div className="border-b border-gray-100 dark:border-gray-800 pb-5 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
