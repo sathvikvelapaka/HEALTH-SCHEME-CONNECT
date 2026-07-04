@@ -1,19 +1,13 @@
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { translations, Language, TranslationKey } from '../data/translations';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { translations } from '../data/translations';
 
-interface LanguageContextType {
-  language: Language;
-  changeLanguage: (lang: Language) => void;
-  t: (key: TranslationKey, ...args: (string | number)[]) => string;
-}
+const LanguageContext = createContext(undefined);
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(() => {
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState(() => {
     const storedLang = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
-    return (storedLang as Language) || 'en';
+    return storedLang || 'en';
   });
 
   useEffect(() => {
@@ -22,11 +16,11 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   }, [language]);
 
-  const changeLanguage = (lang: Language) => {
+  const changeLanguage = (lang) => {
     setLanguage(lang);
   };
 
-  const t = (key: TranslationKey, ...args: (string | number)[]): string => {
+  const t = (key, ...args) => {
     let translation = translations[language]?.[key] || translations['en'][key] || key;
     if (args.length > 0) {
       args.forEach((arg, index) => {
@@ -36,7 +30,6 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
     return translation;
   };
-  
 
   return (
     <LanguageContext.Provider value={{ language, changeLanguage, t }}>
@@ -45,7 +38,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   );
 };
 
-export const useLanguage = (): LanguageContextType => {
+export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider');

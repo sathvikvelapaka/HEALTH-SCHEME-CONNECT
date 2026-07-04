@@ -1,10 +1,8 @@
 
-import type { User } from '../types';
-
 const API_BASE_URL = '/api/auth';
 const STORAGE_KEY = 'auth_user';
 
-const handleResponse = async (response: Response) => {
+const handleResponse = async (response) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Auth failed' }));
     throw new Error(error.message || 'Auth failed');
@@ -12,7 +10,7 @@ const handleResponse = async (response: Response) => {
   return response.json();
 };
 
-export const login = async (email: string, password: string): Promise<User> => {
+export const login = async (email, password) => {
   const response = await fetch(`${API_BASE_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,7 +24,7 @@ export const login = async (email: string, password: string): Promise<User> => {
   return user;
 };
 
-export const signup = async (name: string, email: string, password: string): Promise<User> => {
+export const signup = async (name, email, password) => {
   const response = await fetch(`${API_BASE_URL}/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -44,7 +42,7 @@ export const logout = () => {
   localStorage.removeItem('auth_token');
 };
 
-export const getCurrentUser = (): User | null => {
+export const getCurrentUser = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : null;
 };
