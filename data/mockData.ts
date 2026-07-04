@@ -1,8 +1,8 @@
 
 
-import type { Hospital, Scheme, Treatment, HospitalTreatment, Review, BedStatus } from '../types';
+import { HOSPITAL_IMAGES, SCHEME_LOGOS } from './imageAssets';
 
-export const MOCK_HOSPITALS: Hospital[] = [
+export const MOCK_HOSPITALS = [
     {
       "id": "hosp_001",
       "name": "Apollo Hospitals",
@@ -15,7 +15,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914023607777",
       "email": "info@apollohyderabad.com",
       "website": "www.apollohospitals.com",
-      "image": "https://images.unsplash.com/photo-1587351021759-3e566b9c5043?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_001,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 550,
@@ -43,7 +43,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+911126588500",
       "email": "director@aiims.edu",
       "website": "www.aiims.edu",
-      "image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_002,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 2478,
@@ -71,7 +71,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+911724624600",
       "email": "contactmohali@fortishealthcare.com",
       "website": "www.fortishealthcare.com",
-      "image": "https://images.unsplash.com/photo-1516549655169-df83a092dd14?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_003,
       "is_nabh": true,
       "is_nabl": false,
       "total_beds": 355,
@@ -99,7 +99,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+918067141400",
       "email": "info@narayanahealth.org",
       "website": "www.narayanahealth.org",
-      "image": "https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_004,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 1400,
@@ -127,7 +127,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+912224177000",
       "email": "enquiry@tmc.gov.in",
       "website": "tmc.gov.in",
-      "image": "https://images.unsplash.com/photo-1596541223130-5d31a73fb6c6?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_005,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 629,
@@ -155,7 +155,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+911126515050",
       "email": "contactus@maxhealthcare.com",
       "website": "www.maxhealthcare.in",
-      "image": "https://images.unsplash.com/photo-1538108149393-fbbd8189718c?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_006,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 500,
@@ -183,7 +183,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914162281000",
       "email": "mail@cmcvellore.ac.in",
       "website": "www.cmch-vellore.edu",
-      "image": "https://images.unsplash.com/photo-1632833239869-a37e3c5804d7?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_007,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 2856,
@@ -211,7 +211,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+911244141414",
       "email": "contactus@medanta.org",
       "website": "www.medanta.org",
-      "image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_008,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 1250,
@@ -239,7 +239,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914428271616",
       "email": "info@snmail.org",
       "website": "www.sankaranethralaya.org",
-      "image": "https://images.unsplash.com/photo-1516574187841-693017947984?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_009,
       "is_nabh": true,
       "is_nabl": false,
       "total_beds": 250,
@@ -267,7 +267,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+912066451800",
       "email": "info@rubyhall.com",
       "website": "www.rubyhall.com",
-      "image": "https://images.unsplash.com/photo-1519494080410-f9aa76dd4eeb?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_010,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 750,
@@ -295,7 +295,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+915222494401",
       "email": "director@sgpgi.ac.in",
       "website": "www.sgpgi.ac.in",
-      "image": "https://images.unsplash.com/photo-1587351021759-3e566b9c5043?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_001,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 988,
@@ -323,7 +323,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+918025024444",
       "email": "contact.mhe@manipalhospitals.com",
       "website": "www.manipalhospitals.com",
-      "image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_002,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 650,
@@ -351,7 +351,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+912226405000",
       "email": "info@lilavatihospital.com",
       "website": "www.lilavatihospital.com",
-      "image": "https://images.unsplash.com/photo-1516549655169-df83a092dd14?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_003,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 323,
@@ -379,7 +379,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+911143232222",
       "email": "info@blkhospital.com",
       "website": "www.blkhospital.com",
-      "image": "https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_004,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 650,
@@ -407,7 +407,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914023554455",
       "email": "info@yashodahospitals.com",
       "website": "www.yashodahospitals.com",
-      "image": "https://images.unsplash.com/photo-1596541223130-5d31a73fb6c6?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_005,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 450,
@@ -435,7 +435,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+917926766666",
       "email": "info@sterlinghospitals.com",
       "website": "www.sterlinghospitals.com",
-      "image": "https://images.unsplash.com/photo-1538108149393-fbbd8189718c?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_006,
       "is_nabh": true,
       "is_nabl": false,
       "total_beds": 350,
@@ -463,7 +463,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914044885000",
       "email": "info@kimshospitals.com",
       "website": "www.kimshospitals.com",
-      "image": "https://images.unsplash.com/photo-1632833239869-a37e3c5804d7?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_007,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 500,
@@ -491,7 +491,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914040014444",
       "email": "info@carehospitals.com",
       "website": "www.carehospitals.com",
-      "image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_008,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 435,
@@ -519,7 +519,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+914040011000",
       "email": "info@rainbowhospitals.in",
       "website": "www.rainbowhospitals.in",
-      "image": "https://images.unsplash.com/photo-1516574187841-693017947984?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_009,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 250,
@@ -547,7 +547,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
       "contact_number": "+912230999999",
       "email": "enquiry@kokilabenhospital.com",
       "website": "www.kokilabenhospital.com",
-      "image": "https://images.unsplash.com/photo-1519494080410-f9aa76dd4eeb?auto=format&fit=crop&w=800&q=80",
+      "image": HOSPITAL_IMAGES.HOSP_010,
       "is_nabh": true,
       "is_nabl": true,
       "total_beds": 750,
@@ -565,7 +565,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
     }
 ];
 
-export const MOCK_SCHEMES: Scheme[] = [
+export const MOCK_SCHEMES = [
     {
       "id": "scheme_001",
       "code": "PMJAY",
@@ -576,7 +576,7 @@ export const MOCK_SCHEMES: Scheme[] = [
         "ta": "பிரதான் மந்திரி ஜன் ஆரோக்கிய யோஜனா (ஆயுஷ்மான் பாரத்)"
       },
       "short_name": "PMJAY",
-      "logo_url": "/images/schemes/pmjay-logo.png",
+      "logo_url": SCHEME_LOGOS.PMJAY,
       "coverage_limit": 500000,
       "currency": "INR",
       "government_level": "Central",
@@ -606,7 +606,7 @@ export const MOCK_SCHEMES: Scheme[] = [
         "ta": "டாக்டர் ஒய்.எஸ்.ஆர். ఆరోగ్యశ్రీ சுகாதாரக் காப்பீட்டுத் திட்டம்"
       },
       "short_name": "Aarogyasri",
-      "logo_url": "/images/schemes/aarogyasri-logo.png",
+      "logo_url": SCHEME_LOGOS.AAROGYASRI,
       "coverage_limit": 500000,
       "currency": "INR",
       "government_level": "State",
@@ -756,7 +756,7 @@ export const MOCK_SCHEMES: Scheme[] = [
     }
 ];
 
-export const MOCK_TREATMENTS: Treatment[] = [
+export const MOCK_TREATMENTS = [
   {"id":"t1","code":"CABG","name":"Coronary Artery Bypass Grafting"},
   {"id":"t2","code":"APPEN","name":"Appendectomy"},
   {"id":"t3","code":"DELIV","name":"Normal Delivery"},
@@ -769,7 +769,7 @@ export const MOCK_TREATMENTS: Treatment[] = [
   {"id":"t10","code":"CHEMO", "name": "Chemotherapy (Per Cycle)"}
 ];
 
-export const MOCK_HOSPITAL_TREATMENTS: HospitalTreatment[] = [
+export const MOCK_HOSPITAL_TREATMENTS = [
   {"hospital_id":"hosp_001","treatment_id":"t1","estimated_cost":250000,"scheme_covered":true,"scheme_coverage_limit":500000},
   {"hospital_id":"hosp_001","treatment_id":"t3","estimated_cost":20000,"scheme_covered":true,"scheme_coverage_limit":200000},
   {"hospital_id":"hosp_015","treatment_id":"t2","estimated_cost":40000,"scheme_covered":false,"scheme_coverage_limit":0},
@@ -778,14 +778,14 @@ export const MOCK_HOSPITAL_TREATMENTS: HospitalTreatment[] = [
   {"hospital_id":"hosp_004","treatment_id":"t4","estimated_cost":320000,"scheme_covered":true,"scheme_coverage_limit":300000},
 ];
 
-export const MOCK_REVIEWS: Review[] = [
+export const MOCK_REVIEWS = [
   {"id":"r1","hospital_id":"hosp_001","user_id":"u1","rating":5,"title":"PMJAY honored","body":"Hospital processed the PMJAY claim fast. The staff was very helpful and the facility was clean.","verified":true, "created_at": "2024-05-10T10:00:00Z"},
   {"id":"r2","hospital_id":"hosp_015","user_id":"u2","rating":3,"title":"Mixed experience","body":"They accepted the scheme but the wait time was very long. Doctors were good but administration needs improvement.","verified":false, "created_at": "2024-05-15T14:30:00Z"},
   {"id":"r3","hospital_id":"hosp_001","user_id":"u3","rating":4,"title":"Good service under Aarogyasri","body":"The treatment was covered as promised. A bit of a delay in discharge but overall a positive experience.","verified":true, "created_at": "2024-05-20T09:00:00Z"},
   {"id":"r4","hospital_id":"hosp_004","user_id":"u4","rating":5,"title":"Excellent for Yeshasvini members","body":"Smooth process from admission to discharge. Highly recommend for farmers under this scheme.","verified":true, "created_at": "2024-06-01T11:00:00Z"}
 ];
 
-export const MOCK_BED_STATUS: BedStatus[] = [
+export const MOCK_BED_STATUS = [
   {"hospital_id":"hosp_001","available_icu":12,"available_general":50,"available_maternity":10,"last_updated":"2025-10-19T03:00:00Z"},
   {"hospital_id":"hosp_002","available_icu":20,"available_general":150,"available_maternity":30,"last_updated":"2025-10-19T02:50:00Z"},
   {"hospital_id":"hosp_003","available_icu":5,"available_general":25,"available_maternity":8,"last_updated":"2025-10-19T03:10:00Z"},

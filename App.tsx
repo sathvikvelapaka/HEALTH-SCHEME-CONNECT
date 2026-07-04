@@ -13,8 +13,8 @@ import { Page, AppState } from './types';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 
-const AppContent: React.FC = () => {
-  const [appState, setAppState] = useState<AppState>({
+const AppContent = () => {
+  const [appState, setAppState] = useState({
     currentPage: Page.HOME,
     selectedHospitalId: null,
     selectedSchemeId: null,
@@ -22,9 +22,9 @@ const AppContent: React.FC = () => {
   });
   const { t } = useLanguage();
 
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme') as 'light' | 'dark';
+      return localStorage.getItem('theme');
     }
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
@@ -48,7 +48,7 @@ const AppContent: React.FC = () => {
   };
 
 
-  const navigateTo = useCallback((page: Page, params: { hospitalId?: string; schemeId?: string, searchQuery?: {city: string, scheme: string} } = {}) => {
+  const navigateTo = useCallback((page, params = {}) => {
     setAppState(prev => ({
       ...prev,
       currentPage: page,
@@ -58,7 +58,7 @@ const AppContent: React.FC = () => {
     }));
   }, []);
   
-  const handleComingSoon = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleComingSoon = (e) => {
     e.preventDefault();
     alert(t('featureComingSoon'));
   };
@@ -99,7 +99,7 @@ const AppContent: React.FC = () => {
         <div className="container mx-auto py-12 px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <div className="footer-section">
-                    <h4 className="font-bold text-lg mb-4 font-heading text-white">Health Scheme Hub</h4>
+                    <h4 className="font-bold text-lg mb-4 font-heading text-white">Health Scheme Connect</h4>
                     <p className="text-gray-400">
                         {t('footerSlogan')}
                     </p>
@@ -138,7 +138,7 @@ const AppContent: React.FC = () => {
   );
 };
 
-const App: React.FC = () => (
+const App = () => (
   <AuthProvider>
     <LanguageProvider>
       <AppContent />

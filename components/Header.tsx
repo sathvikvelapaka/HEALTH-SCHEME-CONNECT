@@ -84,17 +84,21 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, toggleTheme, currentTheme }
           onClick={() => onNavigate(Page.HOME)}
         >
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-blue-700 text-white rounded-xl flex items-center justify-center text-xl shadow-lg shadow-blue-500/10 transition-transform group-hover:scale-110 z-10 relative border border-white/20">
-              ⭐
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 relative overflow-hidden transition-transform group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <svg className="w-5.5 h-5.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M12 8v8" />
+                <path d="M9 12h6" />
+              </svg>
             </div>
-             <div className="absolute inset-0 bg-red-500 opacity-20 blur-md rounded-full group-hover:opacity-45 transition-opacity"></div>
+            <div className="absolute inset-0 bg-teal-500/20 opacity-40 blur-md rounded-full group-hover:opacity-70 transition-opacity"></div>
           </div>
           <div className="flex flex-col">
-            <span className='text-lg md:text-2xl font-black text-gray-900 dark:text-white tracking-tight font-heading leading-tight flex items-center gap-1'>
-              Health<span className="text-primary-blue">Hub</span>
-              <span className="text-[10px] font-black bg-red-600 text-white px-1.5 py-0.5 rounded ml-1 tracking-widest uppercase">STAR</span>
+            <span className='text-lg md:text-xl font-extrabold text-gray-900 dark:text-white tracking-tight font-heading leading-tight flex items-center'>
+              Health Scheme<span className="bg-gradient-to-r from-teal-500 to-indigo-600 bg-clip-text text-transparent font-black ml-1">Connect</span>
             </span>
-            <span className="text-[9px] font-bold text-gray-400 tracking-wider -mt-0.5 uppercase hidden sm:inline-block">Empanelled Clinical Networks</span>
+            <span className="text-[9px] font-bold text-gray-400 tracking-wider mt-0.5 uppercase hidden sm:inline-block">Unified Government Health Portal</span>
           </div>
         </div>
 
@@ -449,9 +453,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, toggleTheme, currentTheme }
               >
                 <XIcon className="w-5 h-5" />
               </button>
-              <span className="text-primary-blue font-bold tracking-widest text-xs uppercase bg-blue-100/60 dark:bg-blue-900/40 px-4 py-1.5 rounded-full mb-3 inline-block">Consult HealthHub Experts</span>
+              <span className="text-primary-blue font-bold tracking-widest text-xs uppercase bg-blue-100/60 dark:bg-blue-900/40 px-4 py-1.5 rounded-full mb-3 inline-block">Consult Our Experts</span>
               <h3 className="text-3xl font-extrabold text-gray-900 dark:text-white font-heading tracking-tight">Best HIMS Software For Your Hospital</h3>
-              <p className="text-sm text-text-secondary mt-1 font-medium">Optimal resource efficiency with HealthHub HMIS software</p>
+              <p className="text-sm text-text-secondary mt-1 font-medium">Optimal resource efficiency with our HMIS software</p>
             </div>
 
             {/* Form */}
@@ -505,7 +509,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, toggleTheme, currentTheme }
               <div className="flex items-start gap-2.5 pt-1">
                 <input required id="agree" type="checkbox" className="mt-1 accent-primary-blue h-4 w-4" />
                 <label htmlFor="agree" className="text-xs text-text-muted font-medium cursor-pointer select-none">
-                  I have read and agree to the Privacy Policy. I authorize HealthHub to contact me via phone, SMS, and WhatsApp.
+                  I have read and agree to the Privacy Policy. I authorize Health Scheme Connect to contact me via phone, SMS, and WhatsApp.
                 </label>
               </div>
 

@@ -1,7 +1,5 @@
 
-export type Language = 'en' | 'hi' | 'te' | 'ta';
-
-export const languages: { code: Language; name: string }[] = [
+export const languages = [
   { code: 'en', name: 'English' },
   { code: 'hi', name: 'हिंदी' },
   { code: 'te', name: 'తెలుగు' },
@@ -609,5 +607,4 @@ const translationData = {
   },
 };
 
-export type TranslationKey = keyof typeof translationData.en;
 export const translations = translationData;
