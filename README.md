@@ -101,4 +101,4 @@ npm run build
 
 ## 🎯 Production & Open Source Readiness.
 
-This platform is crafted following a strict, human-friendly design philosophy. It avoids unrequested visual clutter (no mock terminal lines, fake telemetry logs, or unnecessary status pings) to focus entirely on visual elegance, reliable typography, and intuitive layouts that deliver genuine value to citizens and healthcare providers alike.
+This platform is crafted following a strict, human-friendly design philosophy. It avoids unrequested visual clutter (no mock terminal lines, fake telemetry logs, or unnecessary status pings) to focus entirely on visual elegance, reliable typography, and intuitive layouts that deliver genuine value to citizens and healthcare providers alike...
