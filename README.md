@@ -93,7 +93,7 @@ Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
 ### 4. Compile Production Builds
 Generates highly optimized frontend assets in `/dist` and compiles the backend into `dist/server.cjs`:
-```bash
+```bash. ...
 npm run build
 ```
 
