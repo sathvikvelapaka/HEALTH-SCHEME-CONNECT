@@ -1,0 +1,143 @@
+services:
+  # --- TIER 3: DATABASE TIER ---
+  postgres:
+    image: postgres:16-alpine
+    container_name: health-scheme-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: health_scheme
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- TIER 2: APPLICATION / MICROSERVICES TIER ---
+  hospital-service:
+    image: health-scheme-connect-hospital-service:latest
+    build: .
+    container_name: health-scheme-hospital-service
+    restart: on-failure
+    command: npx tsx backend/services/hospital-service/server.ts
+    environment:
+      PORT: 5001
+      HOSPITAL_SERVICE_PORT: 5001
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  scheme-service:
+    image: health-scheme-connect-scheme-service:latest
+    build: .
+    container_name: health-scheme-scheme-service
+    restart: on-failure
+    command: npx tsx backend/services/scheme-service/server.ts
+    environment:
+      PORT: 5002
+      SCHEME_SERVICE_PORT: 5002
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+    ports:
+      - "5002:5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  review-service:
+    image: health-scheme-connect-review-service:latest
+    build: .
+    container_name: health-scheme-review-service
+    restart: on-failure
+    command: npx tsx backend/services/review-service/server.ts
+    environment:
+      PORT: 5003
+      REVIEW_SERVICE_PORT: 5003
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+    ports:
+      - "5003:5003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  auth-service:
+    image: health-scheme-connect-auth-service:latest
+    build: .
+    container_name: health-scheme-auth-service
+    restart: on-failure
+    command: npx tsx backend/services/auth-service/server.ts
+    environment:
+      PORT: 5004
+      AUTH_SERVICE_PORT: 5004
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+    ports:
+      - "5004:5004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ai-service:
+    image: health-scheme-connect-ai-service:latest
+    build: .
+    container_name: health-scheme-ai-service
+    restart: on-failure
+    command: npx tsx backend/services/ai-service/server.ts
+    environment:
+      PORT: 5005
+      AI_SERVICE_PORT: 5005
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "5005:5005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  gateway:
+    image: health-scheme-connect-gateway:latest
+    build: .
+    container_name: health-scheme-api-gateway
+    restart: on-failure
+    command: npx tsx backend/services/gateway/server.ts
+    environment:
+      PORT: 8000
+      GATEWAY_PORT: 8000
+      HOSPITAL_SERVICE_URL: http://hospital-service:5001
+      SCHEME_SERVICE_URL: http://scheme-service:5002
+      REVIEW_SERVICE_URL: http://review-service:5003
+      AUTH_SERVICE_URL: http://auth-service:5004
+      AI_SERVICE_URL: http://ai-service:5005
+    ports:
+      - "8000:8000"
+    depends_on:
+      - hospital-service
+      - scheme-service
+      - review-service
+      - auth-service
+      - ai-service
+
+  # --- TIER 1: PRESENTATION TIER ---
+  frontend:
+    image: health-scheme-connect-frontend:latest
+    build: .
+    container_name: health-scheme-frontend
+    restart: on-failure
+    command: npx vite --host 0.0.0.0 --port 3000
+    environment:
+      GATEWAY_URL: http://gateway:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+
+volumes:
+  postgres_data:
+

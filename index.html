@@ -29,14 +29,14 @@
         --color-text-muted: #64748b;
       }
       html.dark {
-        --color-primary-blue: #818cf8; /* Vibrant light periwinkle/indigo for high contrast */
-        --color-primary-green: #2dd4bf; /* Brighter, premium teal */
-        --color-bg-primary: #0b0f19; /* Rich dark-blue-black */
-        --color-bg-secondary: #111827;
-        --color-bg-dark: #030712;
-        --color-text-primary: #f8fafc;
-        --color-text-secondary: #cbd5e1;
-        --color-text-muted: #94a3b8; /* Brighter slate-400 for superb readability */
+        --color-primary-blue: #3b82f6; /* Brilliant Blue-500 for perfect dark mode contrast */
+        --color-primary-green: #10b981; /* Emerald-500 */
+        --color-bg-primary: #030712; /* Perfect deep gray-950 background */
+        --color-bg-secondary: #111827; /* Gray-900 for cards */
+        --color-bg-dark: #000000;
+        --color-text-primary: #f9fafb; /* Crisp gray-50 */
+        --color-text-secondary: #9ca3af; /* Gray-400 for secondary */
+        --color-text-muted: #6b7280; /* Gray-500 for muted */
       }
       body {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -84,19 +84,7 @@
         }
       }
     </script>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
-  }
-}
-</script>
-</head>
+  </head>
   <body class="bg-bg-primary">
     <div id="root"></div>
     <!-- Vite handles module resolution automatically from index.tsx -->

@@ -34,10 +34,10 @@ const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
       await signup(name, email, password);
       onNavigate(Page.HOME);
     } catch (err: any) {
-        if (err.message === 'EMAIL_EXISTS') {
-            setError(t('emailAlreadyExists'));
+        if (err.message === 'EMAIL_EXISTS' || err.message?.toLowerCase().includes('already exists')) {
+            setError(t('emailAlreadyExists') || 'User with this email already exists');
         } else {
-            setError('An error occurred. Please try again.');
+            setError(err.message || 'An error occurred. Please try again.');
         }
     } finally {
       setIsLoading(false);

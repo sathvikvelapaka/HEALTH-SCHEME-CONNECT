@@ -16,6 +16,9 @@ export interface Hospital {
   is_nabl?: boolean;
   total_beds: number;
   icu_beds: number;
+  available_icu?: number;
+  available_general?: number;
+  available_maternity?: number;
   specialties?: string[];
   emergency_24x7?: boolean;
   ambulance_available?: boolean;
@@ -107,7 +110,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'guest';
   avatar?: string;
 }
 

@@ -1,6 +1,6 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { login as apiLogin, signup as apiSignup, logout as apiLogout, getCurrentUser } from '../services/authService';
+import { login as apiLogin, signup as apiSignup, logout as apiLogout, getCurrentUser, loginAsGuest as apiLoginAsGuest } from '../services/authService';
 
 const AuthContext = createContext(undefined);
 
@@ -32,8 +32,13 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const loginAsGuest = async () => {
+    const user = await apiLoginAsGuest();
+    setUser(user);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, loginAsGuest, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

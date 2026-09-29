@@ -104,7 +104,7 @@ const HospitalComparisonCard: React.FC<{ hospital: Hospital }> = ({ hospital }) 
                     <div className="bg-gray-50 dark:bg-gray-900/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 text-center">
                         <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1">{t('rating')}</p>
                         <p className="text-lg font-black text-gray-900 dark:text-white flex items-center justify-center gap-1">
-                            ⭐ {hospital.rating?.toFixed(1)}
+                            ⭐ {Number(hospital.rating || 0).toFixed(1)}
                         </p>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-900/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 text-center">

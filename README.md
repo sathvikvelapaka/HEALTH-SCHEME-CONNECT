@@ -1,104 +1,100 @@
 # 🏥 Health Scheme Connect (India)
 
-An open-source, full-stack, enterprise-ready platform mapping central and state-level health insurance schemes (e.g., PMJAY, CGHS, ESI, Aarogyasri, MJPJAY, BSKY) directly to empanelled hospital systems. The application empowers low and middle-income families to instantly search, compare, and verify cashless surgical costs, live bed availability, and out-of-pocket coverage with complete transparency.
+An open‑source, full‑stack platform that lets Indian families discover and compare government health‑insurance schemes (PMJAY, CGHS, ESI, Aarogyasri, etc.) across 60+ empanelled hospitals. Users can instantly see cash‑less surgery costs, real‑time bed availability, and scheme coverage.
 
 ---
 
-## 🏗️ Technical Architecture Overview
-
-The system is engineered as a robust **full-stack, cloud-ready monolith** that can easily scale into a **microservices-oriented pattern**. It is built using clean separation of concerns and high-performance technologies:
-
-*   **Frontend SPA:** React 18 powered by **Vite** for blazing-fast builds. Custom UI elements are styled using **Tailwind CSS**, featuring beautiful fluid responsive design and seamless micro-interactions using **motion** (`framer-motion`).
-*   **Backend REST API:** Node.js and **Express** built entirely in **TypeScript**. Services are divided into modular routers (`/backend/routes/*`) targeting specific domain aggregates (hospitals, schemes, reviews, bed status, AI search assistance).
-*   **Production Bundler:** Integrated with **esbuild** to compile TypeScript server modules into a single, self-contained, high-performance CommonJS file (`dist/server.cjs`), eliminating ESModule relative path friction in cloud containers.
-*   **Database Infrastructure:** Powered by a highly-optimized, fully relational PostgreSQL database model, perfectly designed for **AWS RDS (PostgreSQL)**, **Google Cloud SQL**, or self-hosted PostgreSQL clusters.
+## ✨ Key Features
+- **Scheme Catalog** – 51+ central & state health schemes with eligibility, coverage limits, and required documents.
+- **Live Bed Tracker** – Real‑time ICU, general & maternity bed status for all partner hospitals.
+- **Cashless Cost Comparator** – Compare procedure fees across hospitals and see out‑of‑pocket estimates.
+- **Pre‑Authorization Guide** – Step‑by‑step workflow to check eligibility and submit documents.
 
 ---
 
-## 🗄️ Database Schema & Relational Design
-
-The application's backend database is fully structured around a clean relational SQL architecture. The database schema is documented and ready for migration at:
-👉 **[`/backend/schema.sql`](./backend/schema.sql)**
-
-### Key Relational Entities & Data Design
-
-1.  **Hospitals (`hospitals`):** Tracks 60+ major network hospitals (e.g., Apollo, KIMS, Yashoda, Narayana Health, AIIMS, Tata Memorial, Max Super Speciality) across major metropolitan centers (Hyderabad, Bangalore, Delhi, Mumbai). Holds critical status indicators (`is_nabh`, `is_nabl`), contact metadata, coordinates, and pricing indices.
-2.  **Schemes (`schemes`):** Stores 51+ central and state-level government healthcare assurance plans. Includes localized details, eligibility criteria mapping (BPL, Ration card, Income threshold JSON fields), coverage limits, and official portal lifelines.
-3.  **Treatments (`treatments`):** Standardizes clinical procedures (e.g., CABG Heart Bypass, Robotic Knee Reconstruction, Appendectomy, Chemotherapy) using uniform reference codes.
-4.  **Hospital Treatments Junction (`hospital_treatments`):** Tracks direct cost metrics for every treatment across every single network hospital, capturing estimated private fees, scheme eligibility flags, and pre-negotiated package limits.
-5.  **Bed Status (`bed_statuses`):** Tracks real-time active vacancy levels for ICU, general, and maternity beds reserved specifically for government scheme beneficiaries, timestamped with dynamic update intervals.
-6.  **Reviews (`reviews`):** Contains verified patient feedback regarding pre-authorization processing speeds, clinical outcomes, and staff hospitality during cashless admissions.
+## 🏗️ Architecture Overview
+The application is built as a **cloud‑ready monolith** that can evolve into micro‑services. It consists of:
+- **Frontend SPA** – React 18 + Vite, styled with Tailwind CSS and Framer Motion for smooth interactions.
+- **Backend API** – Node.js + Express written in TypeScript, compiled with esbuild to a single `dist/server.cjs` bundle.
+- **Database** – PostgreSQL (managed by AWS RDS) with a clean relational schema.
 
 ---
 
-## 🌟 Core Product Modules
-
-### 1. Unified Government Scheme Catalog
-*   Holds detailed descriptions and specifications for **51 active health schemes**.
-*   Categorized by administrative level (**Central** vs. **State** jurisdictions).
-*   Enables structured querying of coverage limits, family-floater rules, age constraints, and list of required documentation.
-
-### 2. Live Scheme-Specific Bed Tracker
-*   Tracks current vacant ward spaces across **60+ major empanelled hospitals**.
-*   Directly distinguishes between **General Beds**, **ICU Beds**, and **Maternity Wards** allocated for scheme-supported procedures.
-*   Provides rapid status alerts (e.g., "Updated 15 mins ago") to ensure reliability during critical medical emergencies.
-
-### 3. Surgical Cashless Cost Comparer
-*   Allows users to select a procedure (e.g., Heart Bypass Surgery) and instantly view estimated package fees across different hospitals.
-*   Clearly indicates the government scheme coverage limit versus estimated out-of-pocket expenses.
-*   Helps vulnerable families select institutions offering 100% cashless treatment under their active cards.
-
-### 4. Interactive Pre-Authorization Workflow
-*   An educational pipeline detailing the step-by-step process of checking eligibility (by ration cards or BPL databases).
-*   Guides patients on the role of the *Arogya Mitra* (government hospital coordinators), standard approval times, and document uploads.
-
----
-
-## 🚀 AWS Cloud Deployment Matrix
-
-The application is built to be deployed seamlessly within AWS limits while maximizing cost-efficiency:
-
-*   **S3 & CloudFront:** The compiled static frontend (`/dist`) is deployed to an S3 bucket configured for static web hosting, cached via CloudFront for global low-latency.
-*   **ECS Fargate / EC2:** The bundled Node.js Express server (`dist/server.cjs`) runs as a secure container in ECS Fargate or a standard EC2 instance behind an Application Load Balancer (ALB).
-*   **AWS RDS (PostgreSQL):** PostgreSQL instance running inside private subnets of your VPC. Simply run `/backend/schema.sql` to initialize your schemas and seed the initial dataset.
-
-For step-by-step commands and cost-optimization tips, review the **[`AWS_DEPLOYMENT_GUIDE.md`](./AWS_DEPLOYMENT_GUIDE.md)**.
-
----
-
-## 🛠️ Local Development & Execution
-
-Ensure you have [Node.js (v18+)](https://nodejs.org/) installed, then follow these steps:
-
-### 1. Install Dependencies
-```bash
-npm install
+```mermaid
+flowchart LR
+    subgraph Frontend
+        FE[React SPA]
+    end
+    subgraph Backend
+        BE[Node.js Express API]
+    end
+    subgraph DB[PostgreSQL (RDS)]
+        DB
+    end
+    subgraph Infra
+        S3[Amazon S3] --> FE
+        EC2[Amazon EC2] --> BE
+        ALB[ALB] --> EC2
+        VPC[VPC]
+        Route53[Route53] --> ALB
+        IAM[IAM Role] --> EC2
+        ASG[Auto Scaling Group] --> EC2
+        CW[CloudWatch] --> EC2
+    end
+    FE --> BE
+    BE --> DB
 ```
 
-### 2. Configure Environment Variables
-Create a `.env` file in the root directory:
-```env
-PORT=3000
-NODE_ENV=development
-# Add your SQL connection variables if connecting to AWS RDS locally
-DATABASE_URL=postgresql://username:password@your-rds-endpoint:5432/dbname
-```
-
-### 3. Start Development Server
-This runs both the Express backend and Vite frontend concurrently:
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your web browser.
-
-### 4. Compile Production Builds
-Generates highly optimized frontend assets in `/dist` and compiles the backend into `dist/server.cjs`:
-```bash. ...
-npm run build
-```
+## 🛠️ Tech Stack
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 18, Vite, Tailwind CSS, Framer Motion |
+| Backend | Node.js v18+, Express, TypeScript, esbuild |
+| Database | PostgreSQL (AWS RDS) |
+| Containerisation | Docker (local & production) |
+| Orchestration | Docker‑Compose for local dev |
+| Cloud Infra | Terraform provisioning on AWS |
+| CI/CD | npm scripts, GitHub Actions (optional) |
 
 ---
 
-## 🎯 Production & Open Source Readiness.
+## 🚀 AWS Deployment (Current Services)
+- **Amazon S3** – Hosts the compiled static frontend (`/dist`).
+- **Amazon EC2** – Runs the Docker container with the Express backend.
+- **Application Load Balancer (ALB)** – Public entry point routing traffic to EC2.
+- **Amazon RDS (PostgreSQL)** – Managed relational database in private subnets.
+- **VPC** – Public & private subnets, NAT gateway, route tables.
+- **Route 53** – DNS zone for the ALB endpoint.
+- **IAM** – Least‑privilege role for EC2 (S3 access, CloudWatch logs).
+- **Auto Scaling Group** – Scales EC2 instances based on load.
+- **Amazon CloudWatch** – Logs, metrics, and alarm notifications.
 
-This platform is crafted following a strict, human-friendly design philosophy. It avoids unrequested visual clutter (no mock terminal lines, fake telemetry logs, or unnecessary status pings) to focus entirely on visual elegance, reliable typography, and intuitive layouts that deliver genuine value to citizens and healthcare providers alike...
+*Note: CloudFront and AWS Systems Manager have been removed from the project.*
+
+---
+
+## 💻 Local Development & Execution
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+2. **Configure environment** – copy `.env.example` to `.env` and set your DB connection if you have a local PostgreSQL instance.
+3. **Run services** (Docker‑Compose starts DB + backend + frontend)
+   ```bash
+   docker-compose up --build
+   ```
+4. **Access the app** – Open `http://localhost:3000` in your browser.
+5. **Build for production**
+   ```bash
+   npm run build   # creates /dist and compiles server.cjs
+   ```
+
+---
+
+## 🤝 Contributing
+Contributions are welcome! Please fork the repo, create a feature branch, and submit a pull request. Follow the code‑style guidelines and ensure all tests pass.
+
+---
+
+## 📜 License
+This project is licensed under the MIT License.

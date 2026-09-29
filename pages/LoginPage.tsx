@@ -14,7 +14,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const [isGuestLoading, setIsGuestLoading] = useState(false);
+  const { login, loginAsGuest } = useAuth();
   const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,13 +27,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
       await login(email, password);
       onNavigate(Page.HOME);
     } catch (err: any) {
-        if (err.message === 'INVALID_CREDENTIALS') {
-            setError(t('invalidCredentials'));
+        if (err.message === 'INVALID_CREDENTIALS' || err.message?.toLowerCase().includes('invalid')) {
+            setError(t('invalidCredentials') || 'Invalid email or password');
         } else {
-            setError('An error occurred. Please try again.');
+            setError(err.message || 'An error occurred. Please try again.');
         }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setError('');
+    setIsGuestLoading(true);
+    try {
+      await loginAsGuest();
+      onNavigate(Page.HOME);
+    } catch (err: any) {
+      setError(err.message || 'Failed to login as guest.');
+    } finally {
+      setIsGuestLoading(false);
     }
   };
 
@@ -100,7 +114,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isGuestLoading}
               className="w-full flex justify-center py-4 px-4 border border-transparent rounded-2xl shadow-lg shadow-blue-500/30 text-sm font-bold text-white bg-gradient-to-r from-primary-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue disabled:opacity-70 disabled:cursor-not-allowed transform transition-all hover:-translate-y-1 active:scale-95"
             >
               {isLoading ? (
@@ -109,13 +123,44 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    {t('loggingIn')}
+                    {t('loggingIn') || 'Logging in...'}
                  </div>
               ) : (
-                t('signIn')
+                t('signIn') || 'Sign in'
               )}
             </button>
           </form>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white/80 dark:bg-gray-900/80 text-gray-500">Or continue with</span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                onClick={handleGuestLogin}
+                disabled={isLoading || isGuestLoading}
+                className="w-full flex justify-center py-4 px-4 border border-gray-300 dark:border-gray-600 rounded-2xl shadow-sm text-sm font-bold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue disabled:opacity-70 disabled:cursor-not-allowed transform transition-all hover:-translate-y-1 active:scale-95"
+              >
+                {isGuestLoading ? (
+                   <div className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Loading...
+                   </div>
+                ) : (
+                  'Login as Guest'
+                )}
+              </button>
+            </div>
+          </div>
 
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">

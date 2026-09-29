@@ -5,6 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
+    "db:seed": "tsx backend/database/seed.ts",
+    "service:gateway": "tsx backend/services/gateway/server.ts",
+    "service:hospitals": "tsx backend/services/hospital-service/server.ts",
+    "service:schemes": "tsx backend/services/scheme-service/server.ts",
+    "service:reviews": "tsx backend/services/review-service/server.ts",
+    "service:auth": "tsx backend/services/auth-service/server.ts",
+    "service:ai": "tsx backend/services/ai-service/server.ts",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -13,13 +20,17 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "http-proxy-middleware": "^4.2.0",
     "lucide-react": "^1.21.0",
+    "pg": "^8.23.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsx": "^4.21.0"
   },
   "devDependencies": {
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",

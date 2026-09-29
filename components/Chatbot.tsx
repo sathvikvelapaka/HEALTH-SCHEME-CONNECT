@@ -9,6 +9,8 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<{ role: 'user' | 'model'; parts: {text: string}[] }[]>([]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState('');
+  const [tempApiKey, setTempApiKey] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
@@ -20,6 +22,11 @@ const Chatbot: React.FC = () => {
     }
     if(isOpen) {
         setTimeout(() => inputRef.current?.focus(), 100);
+    } else {
+        // Reset when closed
+        setApiKey('');
+        setTempApiKey('');
+        setMessages([]);
     }
   }, [isOpen]);
 
@@ -31,7 +38,7 @@ const Chatbot: React.FC = () => {
 
   const handleSend = async (messageToSend?: string) => {
     const currentInput = messageToSend || userInput;
-    if (!currentInput.trim()) return;
+    if (!currentInput.trim() || !apiKey) return;
     
     const userMessage = { role: 'user' as const, parts: [{text: currentInput}] };
     setMessages((prev) => (prev.length === 0 ? [initialMessage, userMessage] : [...prev, userMessage]));
@@ -41,7 +48,7 @@ const Chatbot: React.FC = () => {
 
     try {
       const history = [...messages, userMessage].slice(0, -1);
-      const responseText = await getChatbotResponse(history, currentInput);
+      const responseText = await getChatbotResponse(history, currentInput, apiKey);
       const modelMessage = { role: 'model' as const, parts: [{text: responseText}] };
       setMessages((prev) => [...prev, modelMessage]);
     } catch (error) {
@@ -50,6 +57,17 @@ const Chatbot: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSaveApiKey = () => {
+    if (tempApiKey.trim()) {
+      setApiKey(tempApiKey.trim());
+    }
+  };
+
+  const handleClearApiKey = () => {
+    setApiKey('');
+    setMessages([]);
   };
 
   const SuggestedPrompts = () => (
@@ -106,9 +124,47 @@ const Chatbot: React.FC = () => {
                     <span className="text-xs text-text-secondary font-medium">Typically replies instantly</span>
                 </div>
             </div>
+            {apiKey && (
+              <button 
+                onClick={handleClearApiKey}
+                className="text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1 border border-transparent hover:border-red-200 rounded-lg"
+                title="Clear API Key"
+              >
+                Logout
+              </button>
+            )}
           </header>
 
-          {/* Messages Area */}
+          {!apiKey ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center bg-gray-50 dark:bg-gray-900">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Welcome to AI Assistant</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                Please enter your Google Gemini API key to start chatting.
+              </p>
+              <input
+                type="password"
+                value={tempApiKey}
+                onChange={(e) => setTempApiKey(e.target.value)}
+                placeholder="Enter Gemini API Key..."
+                className="w-full py-3 px-4 mb-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-primary-blue bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                onKeyPress={(e) => e.key === 'Enter' && handleSaveApiKey()}
+              />
+              <button
+                onClick={handleSaveApiKey}
+                disabled={!tempApiKey.trim()}
+                className="w-full py-3 bg-primary-blue text-white font-bold rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                Start Chatting
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* Messages Area */}
           <div className="flex-1 p-4 overflow-y-auto bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black scroll-smooth">
             <div className="flex flex-col gap-4">
                 {messages.map((msg, index) => (
@@ -171,6 +227,8 @@ const Chatbot: React.FC = () => {
                 <p className="text-[10px] text-text-muted">AI can make mistakes. Verify important info.</p>
             </div>
           </footer>
+            </>
+          )}
         </div>
       )}
     </>
