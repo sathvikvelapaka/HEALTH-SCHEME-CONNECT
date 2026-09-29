@@ -72,7 +72,7 @@ const AppContent = () => {
       case Page.HOSPITAL_DETAIL:
         return appState.selectedHospitalId ? <HospitalDetailPage hospitalId={appState.selectedHospitalId} onNavigate={navigateTo}/> : <HomePage onSearch={(query) => navigateTo(Page.SEARCH_RESULTS, { searchQuery: query })} onNavigate={navigateTo}/>;
       case Page.SCHEME_EXPLORER:
-        return <SchemeExplorerPage />;
+        return <SchemeExplorerPage onNavigate={navigateTo} />;
       case Page.COMPARE:
         return <ComparePage />;
       case Page.LOGIN:

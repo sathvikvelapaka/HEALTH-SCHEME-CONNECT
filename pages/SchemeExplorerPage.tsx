@@ -1,11 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { getSchemes } from '../services/apiService';
-import type { Scheme } from '../types';
+import type { Scheme, Page } from '../types';
 import SchemeCard from '../components/SchemeCard';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const SchemeExplorerPage: React.FC = () => {
+interface SchemeExplorerPageProps {
+  onNavigate?: (page: Page, params?: any) => void;
+}
+
+const SchemeExplorerPage: React.FC<SchemeExplorerPageProps> = ({ onNavigate }) => {
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [loading, setLoading] = useState(true);
   const [cityFilter, setCityFilter] = useState('Hyderabad');
@@ -52,10 +56,12 @@ const SchemeExplorerPage: React.FC = () => {
                 id="cityFilter"
                 value={cityFilter}
                 onChange={(e) => setCityFilter(e.target.value)}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-blue bg-bg-primary dark:bg-bg-secondary"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-blue bg-bg-primary dark:bg-bg-secondary font-bold"
               >
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Bangalore">Bangalore</option>
+                <option value="Hyderabad">Hyderabad (Telangana)</option>
+                <option value="Bangalore">Bangalore (Karnataka)</option>
+                <option value="Delhi">Delhi (NCR)</option>
+                <option value="Mumbai">Mumbai (Maharashtra)</option>
               </select>
         </div>
       </div>
@@ -68,7 +74,7 @@ const SchemeExplorerPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredSchemes.map(scheme => (
-            <SchemeCard key={scheme.id} scheme={scheme} city={cityFilter} />
+            <SchemeCard key={scheme.id} scheme={scheme} city={cityFilter} onNavigate={onNavigate} />
           ))}
         </div>
       )}

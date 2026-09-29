@@ -11,7 +11,7 @@ interface HospitalCardProps {
 
 const HospitalCard: React.FC<HospitalCardProps> = ({ hospital, onSelect }) => {
   const { t } = useLanguage();
-  const totalAvailableBeds = hospital.bedStatus ? hospital.bedStatus.available_general + hospital.bedStatus.available_icu + hospital.bedStatus.available_maternity : 0;
+  const totalAvailableBeds = hospital.bedStatus ? (Number(hospital.bedStatus.available_general) || 0) + (Number(hospital.bedStatus.available_icu) || 0) + (Number(hospital.bedStatus.available_maternity) || 0) : 0;
   
   const bedMetricColor = totalAvailableBeds > 10 ? 'text-green-600 dark:text-green-400' : totalAvailableBeds > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
   const distance = (Math.random() * 5 + 1).toFixed(1); // Mock distance
@@ -72,7 +72,7 @@ const HospitalCard: React.FC<HospitalCardProps> = ({ hospital, onSelect }) => {
         <div className="grid grid-cols-2 gap-4 mb-8">
              <div className="bg-gray-50 dark:bg-gray-700/40 rounded-2xl p-4 flex flex-col items-center justify-center border border-gray-100 dark:border-gray-700 group-hover:border-primary-blue/20 transition-colors">
                  <div className="flex items-center gap-1.5 text-text-primary font-black text-xl mb-0.5">
-                     <span>{hospital.rating?.toFixed(1)}</span>
+                     <span>{Number(hospital.rating || 0).toFixed(1)}</span>
                      <StarIcon className="w-5 h-5 text-yellow-500 fill-current" />
                  </div>
                  <span className="text-[10px] text-text-muted font-black uppercase tracking-widest">{t('rating')}</span>

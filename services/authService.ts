@@ -42,6 +42,17 @@ export const logout = () => {
   localStorage.removeItem('auth_token');
 };
 
+export const loginAsGuest = async () => {
+  const user = {
+    id: 'guest_' + Math.random().toString(36).substring(7),
+    name: 'Guest User',
+    email: 'guest@example.com',
+    role: 'guest'
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+  return user;
+};
+
 export const getCurrentUser = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : null;

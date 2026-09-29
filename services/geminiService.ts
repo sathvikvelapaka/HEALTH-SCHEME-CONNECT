@@ -1,14 +1,15 @@
 
-export const getChatbotResponse = async (history, newMessage) => {
+export const getChatbotResponse = async (history, newMessage, apiKey) => {
   try {
     const response = await fetch('/api/ai/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ history, message: newMessage }),
+      body: JSON.stringify({ history, message: newMessage, apiKey }),
     });
 
     if (!response.ok) {
-      throw new Error('AI request failed');
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'AI request failed');
     }
 
     const data = await response.json();

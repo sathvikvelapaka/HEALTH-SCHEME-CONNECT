@@ -29,7 +29,7 @@ const StarRatingInput: React.FC<{ rating: number; setRating: (rating: number) =>
   </div>
 );
 
-const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) => {
+const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId, onNavigate }) => {
   const [hospital, setHospital] = useState<Hospital | null>(null);
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -37,6 +37,8 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
   const [treatments, setTreatments] = useState<{ treatment: Treatment; details: HospitalTreatment }[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('treatments');
+  const [selectedSchemeCode, setSelectedSchemeCode] = useState<string>('ALL');
+  const [treatmentSearch, setTreatmentSearch] = useState<string>('');
   const { t } = useLanguage();
 
   // Review form state
@@ -106,6 +108,12 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
     return <div className="text-center py-20 text-error">{t('hospitalNotFound')}</div>;
   }
 
+  // Filter treatments by search query
+  const filteredTreatments = treatments.filter(({ treatment }) => 
+    treatment.name.toLowerCase().includes(treatmentSearch.toLowerCase()) ||
+    treatment.code.toLowerCase().includes(treatmentSearch.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
       {/* Hero Banner */}
@@ -120,9 +128,12 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12">
             <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
                         <span className="bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Hospital</span>
                         {hospital.is_nabh && <span className="bg-white/20 text-white backdrop-blur-md border border-white/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">NABH Accredited</span>}
+                        <span className="bg-emerald-500/90 text-white text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
+                          🛡️ {schemes.length} Schemes Accepted
+                        </span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-extrabold text-white font-heading mb-2 leading-tight">{hospital.name}</h1>
                     <p className="text-gray-300 text-lg flex items-center gap-2">
@@ -132,7 +143,7 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 min-w-[80px]">
-                        <p className="text-2xl font-bold text-white">{hospital.rating?.toFixed(1)}</p>
+                        <p className="text-2xl font-bold text-white">{Number(hospital.rating || 0).toFixed(1)}</p>
                         <p className="text-xs text-gray-300 uppercase tracking-wider font-bold">Rating</p>
                     </div>
                      <div className="text-center bg-primary-blue/90 backdrop-blur-md border border-blue-400/30 rounded-2xl p-3 min-w-[80px]">
@@ -148,18 +159,99 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
         <div className="lg:col-span-2 space-y-8">
           {bedStatus && <BedStatusTile status={bedStatus} />}
 
-          {/* Services and Costs */}
-          <div className="bg-bg-secondary rounded-xl shadow-lg border dark:border-gray-700 overflow-hidden">
+          {/* Accepted Health Schemes Showcase */}
+          <div className="bg-bg-secondary rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8 space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-gray-800">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xl">🛡️</span>
+                  <h2 className="text-2xl font-extrabold font-heading text-text-primary">Accepted Health Schemes ({schemes.length})</h2>
+                </div>
+                <p className="text-sm text-text-secondary">
+                  Eligible patients can receive cashless admissions, diagnostics, and surgical treatments under these empanelled government programs:
+                </p>
+              </div>
+              <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-extrabold text-xs px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800 self-start md:self-auto shrink-0 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Cashless Desk Active
+              </span>
+            </div>
+
+            {schemes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {schemes.map((s) => (
+                  <div 
+                    key={s.id}
+                    onClick={() => setSelectedSchemeCode(s.code)}
+                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                      selectedSchemeCode === s.code 
+                        ? 'border-primary-blue bg-blue-50/50 dark:bg-blue-950/30 shadow-md ring-2 ring-primary-blue/20' 
+                        : 'border-gray-200/80 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-900/40 hover:border-primary-blue/40'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <span className="px-2.5 py-0.5 text-xs font-black bg-primary-blue text-white rounded-md">
+                          {s.code}
+                        </span>
+                        <span className="text-xs font-extrabold text-text-muted">
+                          {s.government_level || 'Central'} Scheme
+                        </span>
+                      </div>
+                      <h3 className="font-extrabold text-base text-text-primary mb-1 leading-snug">{s.name}</h3>
+                      <p className="text-xs text-text-secondary line-clamp-2 mb-3 leading-relaxed">{s.description}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-gray-200/60 dark:border-gray-800 flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] uppercase font-bold text-text-muted tracking-wider">Annual Max Limit</p>
+                        <p className="text-lg font-black text-primary-green dark:text-green-400">
+                          {s.coverage_limit > 0 ? `₹${s.coverage_limit.toLocaleString('en-IN')}` : 'Comprehensive'}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedSchemeCode(s.code);
+                        }}
+                        className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-colors ${
+                          selectedSchemeCode === s.code
+                            ? 'bg-primary-blue text-white'
+                            : 'bg-white dark:bg-gray-800 text-primary-blue border border-gray-200 dark:border-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {selectedSchemeCode === s.code ? 'Selected ✓' : 'Check Coverage →'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-2xl text-center border border-amber-100 dark:border-amber-900/50">
+                <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
+                  This hospital accepts general billing and major private insurance TPAs.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Services and Costs with Scheme Calculator */}
+          <div className="bg-bg-secondary rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="p-6 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700">
               <h2 className="text-2xl font-bold font-heading text-text-primary">{t('servicesAndCosts')}</h2>
+              <p className="text-xs text-text-secondary mt-1">
+                Explore treatments, estimated package prices, and calculate what is covered under your government health scheme.
+              </p>
             </div>
+            
             <div className="border-b border-gray-200 dark:border-gray-700 px-6">
                 <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                   <button
                     onClick={() => setActiveTab('treatments')}
                     className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'treatments' ? 'border-primary-blue text-primary-blue' : 'border-transparent text-text-secondary hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'}`}
                   >
-                    {t('treatments')}
+                    {t('treatments')} & Surgeries ({treatments.length})
                   </button>
                   <button
                     onClick={() => setActiveTab('consultations')}
@@ -172,34 +264,132 @@ const HospitalDetailPage: React.FC<HospitalDetailPageProps> = ({ hospitalId }) =
             
             <div className="p-6">
               {activeTab === 'treatments' && (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                      <tr>
-                        <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider rounded-l-lg">{t('treatment')}</th>
-                        <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">{t('estimatedCost')}</th>
-                        <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">{t('schemeCoverage')}</th>
-                        <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider rounded-r-lg">{t('outOfPocket')}</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-bg-secondary divide-y divide-gray-100 dark:divide-gray-700/50">
-                      {treatments.map(({ treatment, details }) => {
-                        const outOfPocket = Math.max(0, details.estimated_cost - details.scheme_coverage_limit);
-                        return (
-                          <tr key={treatment.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-text-primary">{treatment.name}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">₹{details.estimated_cost.toLocaleString('en-IN')}</td>
-                            <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${details.scheme_covered ? 'text-success' : 'text-error'}`}>
-                              {details.scheme_covered ? `${t('upTo')} ₹${details.scheme_coverage_limit.toLocaleString('en-IN')}` : t('notCovered')}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-extrabold text-secondary-orange">₹{outOfPocket.toLocaleString('en-IN')}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                <div className="space-y-4">
+                  {/* Scheme Calculator Controls */}
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                    <div className="w-full md:w-auto flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Calculate Under:</span>
+                      <button
+                        onClick={() => setSelectedSchemeCode('ALL')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                          selectedSchemeCode === 'ALL'
+                            ? 'bg-primary-blue text-white shadow-sm'
+                            : 'bg-white dark:bg-gray-800 text-text-secondary border border-gray-200 dark:border-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        All Schemes
+                      </button>
+                      {schemes.map((s) => (
+                        <button
+                          key={s.id}
+                          onClick={() => setSelectedSchemeCode(s.code)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                            selectedSchemeCode === s.code
+                              ? 'bg-primary-blue text-white shadow-sm'
+                              : 'bg-white dark:bg-gray-800 text-text-secondary border border-gray-200 dark:border-gray-700 hover:bg-gray-100'
+                          }`}
+                        >
+                          {s.code}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setSelectedSchemeCode('NONE')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                          selectedSchemeCode === 'NONE'
+                            ? 'bg-secondary-orange text-white shadow-sm'
+                            : 'bg-white dark:bg-gray-800 text-text-secondary border border-gray-200 dark:border-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        Private (No Scheme)
+                      </button>
+                    </div>
+
+                    <div className="w-full md:w-60">
+                      <input
+                        type="text"
+                        placeholder="Search treatments..."
+                        value={treatmentSearch}
+                        onChange={(e) => setTreatmentSearch(e.target.value)}
+                        className="w-full px-3.5 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Treatments Table */}
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead className="bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                        <tr>
+                          <th scope="col" className="px-5 py-3.5 text-left text-xs font-bold text-text-secondary uppercase tracking-wider rounded-l-lg">{t('treatment')}</th>
+                          <th scope="col" className="px-5 py-3.5 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">{t('estimatedCost')}</th>
+                          <th scope="col" className="px-5 py-3.5 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">
+                            {selectedSchemeCode === 'NONE' ? 'Insurance / Private' : `Scheme Coverage (${selectedSchemeCode})`}
+                          </th>
+                          <th scope="col" className="px-5 py-3.5 text-left text-xs font-bold text-text-secondary uppercase tracking-wider rounded-r-lg">{t('outOfPocket')}</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-bg-secondary divide-y divide-gray-100 dark:divide-gray-700/50">
+                        {filteredTreatments.map(({ treatment, details }) => {
+                          const isNoScheme = selectedSchemeCode === 'NONE';
+                          const effectiveCoverageLimit = isNoScheme ? 0 : details.scheme_coverage_limit;
+                          const outOfPocket = isNoScheme ? details.estimated_cost : Math.max(0, details.estimated_cost - details.scheme_coverage_limit);
+                          const isFullyCovered = !isNoScheme && outOfPocket === 0;
+
+                          return (
+                            <tr key={treatment.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                              <td className="px-5 py-4 whitespace-nowrap">
+                                <p className="text-sm font-bold text-text-primary">{treatment.name}</p>
+                                <span className="text-[10px] text-text-muted font-bold tracking-wider">{treatment.code}</span>
+                              </td>
+                              <td className="px-5 py-4 whitespace-nowrap text-sm text-text-secondary">
+                                ₹{details.estimated_cost.toLocaleString('en-IN')}
+                              </td>
+                              <td className="px-5 py-4 whitespace-nowrap text-sm">
+                                {isNoScheme ? (
+                                  <span className="text-text-muted font-semibold text-xs">Self-pay / Cash</span>
+                                ) : details.scheme_covered ? (
+                                  <div className="flex flex-col">
+                                    <span className="text-success font-bold text-xs">
+                                      Covers up to ₹{details.scheme_coverage_limit.toLocaleString('en-IN')}
+                                    </span>
+                                    <span className="text-[10px] text-text-muted font-semibold">
+                                      Under {selectedSchemeCode === 'ALL' ? (hospital.schemes_accepted?.[0] || 'Empanelled Scheme') : selectedSchemeCode}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-error font-bold text-xs">{t('notCovered')}</span>
+                                )}
+                              </td>
+                              <td className="px-5 py-4 whitespace-nowrap text-sm">
+                                {isFullyCovered ? (
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-base font-black text-success">₹0</span>
+                                    <span className="bg-green-100 dark:bg-green-900/60 text-green-800 dark:text-green-300 text-[10px] px-2 py-0.5 rounded-full font-black border border-green-200 dark:border-green-800">
+                                      100% Cashless
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="font-extrabold text-secondary-orange text-sm">
+                                    ₹{outOfPocket.toLocaleString('en-IN')}
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="bg-blue-50/60 dark:bg-blue-900/20 p-3.5 rounded-xl border border-blue-100 dark:border-blue-800/50 flex items-start gap-2 text-xs text-text-secondary">
+                    <span className="text-base">ℹ️</span>
+                    <p>
+                      <strong>Cashless Claim Process:</strong> Carry your Ration Card or Ayushman Bharat Golden Card with photo ID to the Arogya Mitra desk on the Ground Floor before admission. The hospital will initiate pre-authorization directly with the government scheme authority.
+                    </p>
+                  </div>
                 </div>
               )}
+
               {activeTab === 'consultations' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/50 flex flex-col justify-between">
