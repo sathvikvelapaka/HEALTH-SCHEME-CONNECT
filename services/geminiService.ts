@@ -1,5 +1,5 @@
 
-export const getChatbotResponse = async (history, newMessage, apiKey) => {
+export const getChatbotResponse = async (history: any[], newMessage: string, apiKey?: string): Promise<string> => {
   try {
     const response = await fetch('/api/ai/chat', {
       method: 'POST',

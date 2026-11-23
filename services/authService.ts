@@ -2,7 +2,7 @@
 const API_BASE_URL = '/api/auth';
 const STORAGE_KEY = 'auth_user';
 
-const handleResponse = async (response) => {
+const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Auth failed' }));
     throw new Error(error.message || 'Auth failed');
@@ -10,7 +10,7 @@ const handleResponse = async (response) => {
   return response.json();
 };
 
-export const login = async (email, password) => {
+export const login = async (email: string, password: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -24,7 +24,7 @@ export const login = async (email, password) => {
   return user;
 };
 
-export const signup = async (name, email, password) => {
+export const signup = async (name: string, email: string, password: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -37,12 +37,12 @@ export const signup = async (name, email, password) => {
   return user;
 };
 
-export const logout = () => {
+export const logout = (): void => {
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem('auth_token');
 };
 
-export const loginAsGuest = async () => {
+export const loginAsGuest = async (): Promise<any> => {
   const user = {
     id: 'guest_' + Math.random().toString(36).substring(7),
     name: 'Guest User',
@@ -53,7 +53,7 @@ export const loginAsGuest = async () => {
   return user;
 };
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): any => {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : null;
 };

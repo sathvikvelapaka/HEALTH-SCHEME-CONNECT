@@ -29,7 +29,7 @@ services:
     environment:
       PORT: 5001
       HOSPITAL_SERVICE_PORT: 5001
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/health_scheme}
     ports:
       - "5001:5001"
     depends_on:
@@ -45,7 +45,7 @@ services:
     environment:
       PORT: 5002
       SCHEME_SERVICE_PORT: 5002
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/health_scheme}
     ports:
       - "5002:5002"
     depends_on:
@@ -61,7 +61,7 @@ services:
     environment:
       PORT: 5003
       REVIEW_SERVICE_PORT: 5003
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/health_scheme}
     ports:
       - "5003:5003"
     depends_on:
@@ -77,7 +77,7 @@ services:
     environment:
       PORT: 5004
       AUTH_SERVICE_PORT: 5004
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/health_scheme}
     ports:
       - "5004:5004"
     depends_on:
@@ -93,7 +93,7 @@ services:
     environment:
       PORT: 5005
       AI_SERVICE_PORT: 5005
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/health_scheme
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/health_scheme}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     ports:
       - "5005:5005"

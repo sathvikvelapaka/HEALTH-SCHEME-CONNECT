@@ -1,11 +1,20 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { login as apiLogin, signup as apiSignup, logout as apiLogout, getCurrentUser, loginAsGuest as apiLoginAsGuest } from '../services/authService';
 
-const AuthContext = createContext(undefined);
+interface AuthContextType {
+  user: any;
+  isAuthenticated: boolean;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  loginAsGuest: () => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,12 +26,12 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string) => {
     const user = await apiLogin(email, password);
     setUser(user);
   };
 
-  const signup = async (name, email, password) => {
+  const signup = async (name: string, email: string, password: string) => {
     const user = await apiSignup(name, email, password);
     setUser(user);
   };

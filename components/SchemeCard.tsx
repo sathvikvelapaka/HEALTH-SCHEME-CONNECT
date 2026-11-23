@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import type { Scheme, Hospital, Page } from '../types';
+import { Scheme, Hospital, Page } from '../types';
 import { getHospitalsForScheme } from '../services/apiService';
 import { ExternalLinkIcon } from './icons';
 import { useLanguage } from '../contexts/LanguageContext';

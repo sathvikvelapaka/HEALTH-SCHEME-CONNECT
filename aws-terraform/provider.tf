@@ -14,7 +14,7 @@ provider "aws" {
 
 variable "aws_region" {
   description = "AWS region"
-  default     = "us-east-1"
+  default     = "ap-south-2" # Asia Pacific (Hyderabad)
 }
 
 variable "environment" {

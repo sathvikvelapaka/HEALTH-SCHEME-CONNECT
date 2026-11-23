@@ -14,7 +14,7 @@ resource "aws_db_instance" "postgres" {
   allocated_storage    = 20
   storage_type         = "gp3"
   engine               = "postgres"
-  engine_version       = "16.1"
+  engine_version       = "16.9"
   instance_class       = "db.t4g.micro" # Free-tier eligible / low cost
   db_name              = "health_scheme"
   username             = "postgres"

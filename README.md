@@ -28,8 +28,8 @@ flowchart LR
     subgraph Backend
         BE[Node.js Express API]
     end
-    subgraph DB[PostgreSQL (RDS)]
-        DB
+    subgraph DB ["PostgreSQL (RDS)"]
+        DB_INST[(PostgreSQL RDS)]
     end
     subgraph Infra
         S3[Amazon S3] --> FE
@@ -38,11 +38,10 @@ flowchart LR
         VPC[VPC]
         Route53[Route53] --> ALB
         IAM[IAM Role] --> EC2
-        ASG[Auto Scaling Group] --> EC2
         CW[CloudWatch] --> EC2
     end
     FE --> BE
-    BE --> DB
+    BE --> DB_INST
 ```
 
 ## 🛠️ Tech Stack

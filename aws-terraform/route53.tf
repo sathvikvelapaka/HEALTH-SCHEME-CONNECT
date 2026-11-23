@@ -1,17 +1,16 @@
 variable "domain_name" {
-  description = "The domain name for the application (e.g., healthscheme.com)"
-  default     = "healthscheme.local" # Change to real domain in production
+  description = "The domain name for the application"
+  default     = "healthschemeconnect.online"
 }
 
-# Fetch the existing Hosted Zone for the domain
-data "aws_route53_zone" "main" {
-  name         = var.domain_name
-  private_zone = false
+# Create the Hosted Zone for the domain
+resource "aws_route53_zone" "main" {
+  name = var.domain_name
 }
 
 # Create an Alias record pointing the domain to the ALB
 resource "aws_route53_record" "app_alias" {
-  zone_id = data.aws_route53_zone.main.zone_id
+  zone_id = aws_route53_zone.main.zone_id
   name    = var.domain_name
   type    = "A"
 
@@ -24,7 +23,7 @@ resource "aws_route53_record" "app_alias" {
 
 # Optional: Create a www subdomain record
 resource "aws_route53_record" "www_alias" {
-  zone_id = data.aws_route53_zone.main.zone_id
+  zone_id = aws_route53_zone.main.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 
@@ -44,4 +43,9 @@ output "alb_dns_name" {
 output "application_url" {
   description = "The public URL of the Health Scheme Connect application"
   value       = "http://${var.domain_name}"
+}
+
+output "hostinger_nameservers" {
+  description = "⚠️ IMPORTANT: Copy these 4 Name Servers into your Hostinger Dashboard!"
+  value       = aws_route53_zone.main.name_servers
 }

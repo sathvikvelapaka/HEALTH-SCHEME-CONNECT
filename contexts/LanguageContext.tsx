@@ -1,10 +1,15 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { translations } from '../data/translations';
 
-const LanguageContext = createContext(undefined);
+interface LanguageContextType {
+  language: string;
+  changeLanguage: (lang: string) => void;
+  t: (key: string, ...args: any[]) => string;
+}
 
-export const LanguageProvider = ({ children }) => {
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState(() => {
     const storedLang = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
     return storedLang || 'en';
@@ -16,12 +21,12 @@ export const LanguageProvider = ({ children }) => {
     }
   }, [language]);
 
-  const changeLanguage = (lang) => {
+  const changeLanguage = (lang: string) => {
     setLanguage(lang);
   };
 
-  const t = (key, ...args) => {
-    let translation = translations[language]?.[key] || translations['en'][key] || key;
+  const t = (key: string, ...args: any[]) => {
+    let translation = (translations as any)[language]?.[key] || (translations as any)['en'][key] || key;
     if (args.length > 0) {
       args.forEach((arg, index) => {
         const placeholder = new RegExp(`\\{${index}\\}`, 'g');

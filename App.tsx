@@ -22,9 +22,9 @@ const AppContent = () => {
   });
   const { t } = useLanguage();
 
-  const [theme, setTheme] = useState(() => {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
+      return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
     }
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
@@ -48,7 +48,7 @@ const AppContent = () => {
   };
 
 
-  const navigateTo = useCallback((page, params = {}) => {
+  const navigateTo = useCallback((page: Page, params: any = {}) => {
     setAppState(prev => ({
       ...prev,
       currentPage: page,
@@ -58,7 +58,7 @@ const AppContent = () => {
     }));
   }, []);
   
-  const handleComingSoon = (e) => {
+  const handleComingSoon = (e: React.MouseEvent) => {
     e.preventDefault();
     alert(t('featureComingSoon'));
   };

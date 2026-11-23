@@ -1,6 +1,7 @@
 # S3 Bucket for App Assets/Backups
 resource "aws_s3_bucket" "app_bucket" {
-  bucket = "health-scheme-assets-${var.environment}-${random_string.suffix.result}"
+  bucket        = "health-scheme-assets-${var.environment}-${random_string.suffix.result}"
+  force_destroy = true
 }
 
 # Ensure Bucket is Private
@@ -27,7 +28,7 @@ resource "aws_sns_topic" "alerts" {
 resource "aws_sns_topic_subscription" "email_alert" {
   topic_arn = aws_sns_topic.alerts.arn
   protocol  = "email"
-  endpoint  = "admin@healthscheme.local" # Replace with real email
+  endpoint  = "sathvikvelapaka2005@gmail.com"
 }
 
 # CloudWatch Log Group for the Application
@@ -36,7 +37,7 @@ resource "aws_cloudwatch_log_group" "app_logs" {
   retention_in_days = 30
 }
 
-# CloudWatch Alarm for High CPU on the Auto Scaling Group
+# CloudWatch Alarm for High CPU on the EC2 Instance
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   alarm_name          = "health-scheme-high-cpu"
   comparison_operator = "GreaterThanThreshold"
@@ -46,35 +47,14 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   period              = "120"
   statistic           = "Average"
   threshold           = "80"
-  alarm_description   = "This alarm triggers when ASG CPU exceeds 80%"
+  alarm_description   = "This alarm triggers when EC2 CPU exceeds 80%"
   
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.app.name
+    InstanceId = aws_instance.app.id
   }
 
   alarm_actions = [
-    aws_sns_topic.alerts.arn,
-    aws_autoscaling_policy.scale_up.arn
+    aws_sns_topic.alerts.arn
   ]
 }
 
-# CloudWatch Alarm for Low CPU (Scale down)
-resource "aws_cloudwatch_metric_alarm" "low_cpu" {
-  alarm_name          = "health-scheme-low-cpu"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "30"
-  alarm_description   = "This alarm scales down ASG when CPU drops below 30%"
-  
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.app.name
-  }
-
-  alarm_actions = [
-    aws_autoscaling_policy.scale_down.arn
-  ]
-}
